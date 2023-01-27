@@ -16,6 +16,9 @@ class OTPTextField extends StatefulWidget {
   /// Width of the single OTP Field
   final double fieldWidth;
 
+    /// Height of the single OTP Field
+  final double fieldHeight;
+
   /// space between the text fields
   final double spaceBetween;
 
@@ -38,7 +41,7 @@ class OTPTextField extends StatefulWidget {
 
   /// Text Field Alignment
   /// default: MainAxisAlignment.spaceBetween [MainAxisAlignment]
-  final MainAxisAlignment textFieldAlignment;
+  final WrapAlignment textFieldAlignment;
 
   /// Obscure Text if data is sensitive
   final bool obscureText;
@@ -68,6 +71,7 @@ class OTPTextField extends StatefulWidget {
     this.width = 10,
     this.controller,
     this.fieldWidth = 30,
+    this.fieldHeight = 30,
     this.spaceBetween = 0,
     this.otpFieldStyle,
     this.hasError = false,
@@ -75,7 +79,7 @@ class OTPTextField extends StatefulWidget {
     this.style = const TextStyle(),
     this.outlineBorderRadius: 10,
     this.textCapitalization = TextCapitalization.none,
-    this.textFieldAlignment = MainAxisAlignment.spaceBetween,
+    this.textFieldAlignment = WrapAlignment.center,
     this.obscureText = false,
     this.fieldStyle = FieldStyle.underline,
     this.onChanged,
@@ -131,9 +135,10 @@ class _OTPTextFieldState extends State<OTPTextField> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width,
-      child: Row(
-        mainAxisAlignment: widget.textFieldAlignment,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      height: widget.fieldHeight,
+      child: Wrap(
+        runAlignment: widget.textFieldAlignment,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: List.generate(widget.length, (index) {
           return buildTextField(context, index);
         }),
