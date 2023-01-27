@@ -133,7 +133,8 @@ class _OTPTextFieldState extends State<OTPTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      color: Colors.amber,
       width: widget.width,
       height: widget.fieldHeight,
       child: Wrap(
