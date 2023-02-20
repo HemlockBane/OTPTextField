@@ -1,1 +1,1 @@
-enum FieldStyle { underline, box }
+   enum FieldStyle { underline, box }

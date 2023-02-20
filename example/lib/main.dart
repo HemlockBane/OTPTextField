@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
             controller: otpController,
             length: 5,
             width: MediaQuery.of(context).size.width,
-            textFieldAlignment: WrapAlignment.spaceAround,
+            horizontalAlignment: WrapAlignment.spaceAround,
             fieldWidth: 45,
             fieldStyle: FieldStyle.box,
             outlineBorderRadius: 15,

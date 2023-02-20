@@ -16,7 +16,7 @@ class OTPTextField extends StatefulWidget {
   /// Width of the single OTP Field
   final double fieldWidth;
 
-    /// Height of the single OTP Field
+  /// Height of the single OTP Field
   final double fieldHeight;
 
   /// space between the text fields
@@ -40,8 +40,10 @@ class OTPTextField extends StatefulWidget {
   final double outlineBorderRadius;
 
   /// Text Field Alignment
-  /// default: MainAxisAlignment.spaceBetween [MainAxisAlignment]
-  final WrapAlignment textFieldAlignment;
+  final WrapAlignment horizontalAlignment;
+
+  /// Text to show when there is an error
+  final String? errorText;
 
   /// Obscure Text if data is sensitive
   final bool obscureText;
@@ -75,11 +77,12 @@ class OTPTextField extends StatefulWidget {
     this.spaceBetween = 0,
     this.otpFieldStyle,
     this.hasError = false,
+    this.errorText,
     this.keyboardType = TextInputType.number,
     this.style = const TextStyle(),
     this.outlineBorderRadius: 10,
     this.textCapitalization = TextCapitalization.none,
-    this.textFieldAlignment = WrapAlignment.center,
+    this.horizontalAlignment = WrapAlignment.center,
     this.obscureText = false,
     this.fieldStyle = FieldStyle.underline,
     this.onChanged,
@@ -133,17 +136,32 @@ class _OTPTextFieldState extends State<OTPTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.amber,
-      width: widget.width,
-      height: widget.fieldHeight,
-      child: Wrap(
-        runAlignment: widget.textFieldAlignment,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: List.generate(widget.length, (index) {
-          return buildTextField(context, index);
-        }),
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          width: widget.width,
+          child: Wrap(
+            spacing: widget.spaceBetween,
+            alignment: widget.horizontalAlignment,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: List.generate(widget.length, (index) {
+              return buildTextField(context, index);
+            }),
+          ),
+        ),
+        SizedBox(height: 18.5),
+        Row(
+          children: [
+            Icon(
+              Icons.error_outline_outlined,
+              color: Color(0xFFF57068),
+              size: 20,
+            ),
+            SizedBox(width: 10),
+            Text(widget.errorText ?? '')
+          ],
+        )
+      ],
     );
   }
 
@@ -174,7 +192,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
 
       return widget.fieldStyle == FieldStyle.box
           ? OutlineInputBorder(
-              borderSide: BorderSide(color: colorOrError),
+              borderSide: BorderSide(color: colorOrError, width: 2),
               borderRadius: BorderRadius.circular(widget.outlineBorderRadius),
             )
           : UnderlineInputBorder(borderSide: BorderSide(color: colorOrError));
@@ -182,9 +200,6 @@ class _OTPTextFieldState extends State<OTPTextField> {
 
     return Container(
       width: widget.fieldWidth,
-      margin: EdgeInsets.only(
-        right: isLast ? 0 : widget.spaceBetween,
-      ),
       child: TextField(
         controller: _textControllers[index],
         keyboardType: widget.keyboardType,
@@ -207,9 +222,12 @@ class _OTPTextFieldState extends State<OTPTextField> {
           disabledBorder: _getBorder(_otpFieldStyle.disabledBorderColor),
           errorBorder: _getBorder(_otpFieldStyle.errorBorderColor),
           focusedErrorBorder: _getBorder(_otpFieldStyle.errorBorderColor),
-          errorText: null,
+          errorText: widget.errorText,
           // to hide the error text
-          errorStyle: const TextStyle(height: 0, fontSize: 0),
+          errorStyle: const TextStyle(
+            height: 0,
+            fontSize: 0,
+          ),
         ),
         onChanged: (String str) {
           if (str.length > 1) {
